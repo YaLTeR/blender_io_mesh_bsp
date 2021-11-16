@@ -1,21 +1,15 @@
-# Quake 1 BSP Importer for Blender
+# Goldsrc BSP Importer for Blender
 
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=S3GTZ2J938U6Y&lc=GB&item_name=Andrew%20Palmer&currency_code=GBP&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted)
+# This repository is a Goldsrc port of the original [blender_io_mesh_bsp](https://github.com/andyp123/blender_io_mesh_bsp/) released by andyp123
 
 An add-on for [Blender](https://www.blender.org/) that makes it possible to import
-Quake BSP files, including textures (which are stored in the BSP) as materials. It
-works with Blender 2.80 and there is an older release for the Blender 2.7x series,
-which can be downloaded by clicking [here](https://github.com/andyp123/blender_io_mesh_bsp/releases/download/v0.0.7/io_mesh_bsp.zip).
+Goldsrc BSP files, including textures (which are stored in the BSP) as materials. It
+works with Blender 2.80
 
-__Note:__ You will need Blender 2.80 Beta (available [here](https://builder.blender.org/download/))
-to run this addon. At the time of writing, Blender 2.80 is still in development, and
-this addon may stop functioning due to a change in Blender, but I will try and keep it
-working.
-
-![Imported level (apdm3)](https://raw.githubusercontent.com/andyp123/blender_io_mesh_bsp/master/README_img/apdm3.png)
+![Imported level (c0a0)](https://raw.githubusercontent.com/stalker2106x/blender_io_mesh_bsp/master/README_img/c0a0.png)
 
 ## Installation
-1. Download the latest release from GitHub by clicking [here](https://github.com/andyp123/blender_io_mesh_bsp/releases/).
+1. Download the latest release from GitHub by clicking [here](https://github.com/stalker2106x/blender_io_mesh_bsp/releases/).
 2. In Blender, open Preferences (Edit > Preferences) and switch to the Add-ons section.
 3. Select 'Install Add-on from file...' and select the file that you downloaded.
 4. Search for the add-on in the list (enter 'bsp' to quickly find it) and enable it.
@@ -23,9 +17,12 @@ working.
 
 ## Usage
 Once the addon has been installed, you will be able to import Quake bsp files from
-File > Import > Quake BSP (.bsp). Selecting this option will open the file browser
+File > Import > Goldsrc BSP (.bsp). Selecting this option will open the file browser
 and allow you to select a file to load. Before loading the file, you can tweak some
 options to change how the BSP will be imported into Blender.
+
+### Exported WAD path
+Sets the path where are located all the .bmp files that blender will load into your materials
 
 ### Scale (default: 0.03125)
 Changes the size of the imported geometry. The size of a unit in Quake is not the

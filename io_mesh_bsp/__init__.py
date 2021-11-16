@@ -15,42 +15,49 @@
 #  All rights reserved.
 #  ***** GPL LICENSE BLOCK *****
 
+# addon information
+bl_info = {
+    "name": "Import GoldSrc BSP format",
+    "author": "Maxime Martens (forked from Andrew Palmer work with contributions from Ian Cunningham)",
+    "version": (1, 2),
+    "blender": (2, 80, 0),
+    "location": "File > Import > GoldSrc (.bsp)",
+    "description": "Import geometry and materials from a GoldSrc BSP file.",
+    "wiki_url": "https://github.com/stalker2106x/blender_io_mesh_bsp",
+    "category": "Import-Export",
+}
+
 # reload submodules if the addon is reloaded 
 if "bpy" in locals():
     import importlib
     importlib.reload(bsp_importer)
-
-# addon information
-bl_info = {
-    "name": "Import Quake BSP format",
-    "author": "Andrew Palmer (with contributions from Ian Cunningham)",
-    "version": (1, 1),
-    "blender": (2, 80, 0),
-    "location": "File > Import > Quake BSP (.bsp)",
-    "description": "Import geometry and materials from a Quake 1 BSP file.",
-    "wiki_url": "https://github.com/andyp123/blender_io_mesh_bsp",
-    "category": "Import-Export",
-}
+else:
+    from . import bsp_importer
 
 # imports
 import bpy
 from bpy_extras.io_utils import ImportHelper
 from bpy.props import StringProperty, BoolProperty, EnumProperty, FloatProperty
 from bpy.types import Operator
-from . import bsp_importer
 import time
 
 # main code
 class BSPImporter(bpy.types.Operator, ImportHelper):
     bl_idname       = "bsp_importer.bsp"
-    bl_description  = "Import geometry from Quake BSP file format (.bsp)"
-    bl_label        = "Quake BSP Importer"
+    bl_description  = "Import geometry from GoldSrc BSP file format (.bsp)"
+    bl_label        = "Goldsrc BSP Importer"
     bl_options      = {'UNDO'}
 
     filename_ext = ".bsp"
     filter_glob: StringProperty(
         default="*.bsp",
         options={'HIDDEN'},
+        )
+
+    extractedwad_path: StringProperty(
+        name="extracted WAD path",
+        description="Import textures from the extracted WAD as materials.",
+        default="path/to/wad/export",
         )
 
     scale: FloatProperty(
@@ -114,6 +121,7 @@ class BSPImporter(bpy.types.Operator, ImportHelper):
         time_start = time.time()
         options = {
             'scale' : self.scale,
+            'extractedwad_path' : self.extractedwad_path,
             'create_materials' : self.create_materials,
             'remove_hidden' : self.remove_hidden,
             'brightness_adjust' : self.brightness_adjust,
@@ -133,7 +141,7 @@ classes = (
 )
 
 def menu_func(self, context):
-    self.layout.operator(BSPImporter.bl_idname, text="Quake BSP (.bsp)")
+    self.layout.operator(BSPImporter.bl_idname, text="GoldSrc BSP (.bsp)")
 
 
 def register():

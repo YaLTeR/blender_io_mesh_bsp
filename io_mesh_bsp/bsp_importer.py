@@ -418,6 +418,7 @@ def camera_add(entity, scale):
 
 def create_materials(texture_data, options):
     for texture_entry in texture_data:
+        print(texture_entry)
         name = texture_entry['name']
         if (options['remove_hidden'] is True and name in ignored_texnames):
             continue
@@ -429,15 +430,9 @@ def create_materials(texture_data, options):
         mat.diffuse_color = [uniform(0.1, 1.0), uniform(0.1, 1.0), uniform(0.1, 1.0), 1.0]
         mat.use_backface_culling = True
 
-        image = texture_entry['image']
+        image = bpy.data.images.load(options['extractedwad_path']+f"{name.upper()}.bmp")
         mask = texture_entry['mask']
 
-        # There are no images for bsp 30 (Half-Life format)
-        if image is None:
-            continue
-
-        # pack image data in .blend
-        image.pack()
         # create texture from image
         texture = bpy.data.textures.new(name, type='IMAGE')
         texture.image = image
@@ -454,17 +449,33 @@ def create_materials(texture_data, options):
         node_tree = mat.node_tree
         main_shader = node_tree.nodes['Principled BSDF']
         output_node = node_tree.nodes['Material Output']
-        node_tree.nodes.remove(main_shader) # Replace with Diffuse
-        if texture_entry['is_emissive'] and mask is None:
-            main_shader = node_tree.nodes.new('ShaderNodeEmission')
-        else:
-            main_shader = node_tree.nodes.new('ShaderNodeBsdfDiffuse')
 
         image_node = node_tree.nodes.new('ShaderNodeTexImage')
         image_node.image = image
         image_node.interpolation = 'Closest'
         image_node.location = [-256.0, 300.0]
         node_tree.links.new(image_node.outputs['Color'], main_shader.inputs[0])
+
+        # Handle magenta transparency
+        if name[0] == '{':
+            magenta_node = node_tree.nodes.new('ShaderNodeRGB')
+            magenta_node.color = [0.0, 0.0, 1.0]
+
+            subtract_node = node_tree.nodes.new('ShaderNodeMixRGB')
+            subtract_node.blend_type = 'SUBTRACT'
+
+            node_tree.links.new(magenta_node.outputs['Color'], subtract_node.inputs[1])
+            node_tree.links.new(image_node.outputs['Color'], subtract_node.inputs[2])
+
+            compare_node = node_tree.nodes.new('ShaderNodeMath')
+            compare_node.operation = 'COMPARE'
+            node_tree.links.new(subtract_node.outputs[0], compare_node.inputs[0])
+
+            invert_node = node_tree.nodes.new('ShaderNodeInvert')
+            node_tree.links.new(compare_node.outputs[0], invert_node.inputs['Color'])
+
+            #link to shader
+            node_tree.links.new(invert_node.outputs[0], main_shader.inputs['Alpha'])
 
         # emission mask shader
         if mask is not None:
