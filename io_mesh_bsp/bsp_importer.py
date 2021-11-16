@@ -458,20 +458,25 @@ def create_materials(texture_data, options):
 
         # Handle magenta transparency
         if name[0] == '{':
+            mat.blend_method = 'BLEND'
+
             magenta_node = node_tree.nodes.new('ShaderNodeRGB')
-            magenta_node.color = [0.0, 0.0, 1.0]
+            magenta_node.outputs[0].default_value = (0, 0, 1, 1)
 
             subtract_node = node_tree.nodes.new('ShaderNodeMixRGB')
             subtract_node.blend_type = 'SUBTRACT'
+            subtract_node.inputs[0].default_value = 1.0
 
             node_tree.links.new(magenta_node.outputs['Color'], subtract_node.inputs[1])
             node_tree.links.new(image_node.outputs['Color'], subtract_node.inputs[2])
 
             compare_node = node_tree.nodes.new('ShaderNodeMath')
             compare_node.operation = 'COMPARE'
+            compare_node.inputs[1].default_value = 0.0
             node_tree.links.new(subtract_node.outputs[0], compare_node.inputs[0])
 
             invert_node = node_tree.nodes.new('ShaderNodeInvert')
+            invert_node.inputs[0].default_value = 1.0
             node_tree.links.new(compare_node.outputs[0], invert_node.inputs['Color'])
 
             #link to shader
