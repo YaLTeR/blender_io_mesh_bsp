@@ -430,11 +430,17 @@ def create_materials(texture_data, options):
         mat.diffuse_color = [uniform(0.1, 1.0), uniform(0.1, 1.0), uniform(0.1, 1.0), 1.0]
         mat.use_backface_culling = True
 
-        image = bpy.data.images.load(options['extractedwad_path']+f"{name.upper()}.bmp")
+        image = None
+        try:
+            image = bpy.data.images.load(options['extractedwad_path']+f"{name.upper()}.bmp")
+        except Exception as ex:
+            print(f"failed to load texture {name}, replacing with AAATRIGGER...")
+            image = bpy.data.images.load(options['extractedwad_path']+"AAATRIGGER.bmp")
         mask = texture_entry['mask']
 
         # create texture from image
         texture = bpy.data.textures.new(name, type='IMAGE')
+
         texture.image = image
         texture.use_alpha = texture_entry['use_alpha']
 
