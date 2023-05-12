@@ -102,6 +102,7 @@ ignored_texnames = (
     "lavaskip",
     "slimeskip",
     "hintskip",
+    "sky",
 )
 
 imported_entity_prefixes = (
