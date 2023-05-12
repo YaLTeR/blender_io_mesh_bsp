@@ -23,7 +23,7 @@ bl_info = {
     "blender": (2, 80, 0),
     "location": "File > Import > GoldSrc (.bsp)",
     "description": "Import geometry and materials from a GoldSrc BSP file.",
-    "wiki_url": "https://github.com/stalker2106x/blender_io_mesh_bsp",
+    "wiki_url": "https://github.com/YaLTeR/blender_io_mesh_bsp",
     "category": "Import-Export",
 }
 
