@@ -450,9 +450,12 @@ def create_materials(texture_data, options):
         image = None
         try:
             image = bpy.data.images.load(options['extractedwad_path']+f"{name.upper()}.bmp")
-        except Exception as ex:
-            print(f"failed to load texture {name}, replacing with AAATRIGGER...")
-            image = bpy.data.images.load(options['extractedwad_path']+"AAATRIGGER.bmp")
+        except Exception:
+            try:
+                image = bpy.data.images.load(options['extractedwad_path']+f"{name}.bmp")
+            except Exception:
+                print(f"failed to load texture {name}, replacing with AAATRIGGER...")
+                image = bpy.data.images.load(options['extractedwad_path']+"AAATRIGGER.bmp")
         mask = texture_entry['mask']
 
         # create texture from image
