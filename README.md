@@ -1,17 +1,29 @@
 # Goldsrc BSP Importer for Blender
 
-# This repository is a Goldsrc port of the original [blender_io_mesh_bsp](https://github.com/andyp123/blender_io_mesh_bsp/) released by andyp123
+This repository is a fork of the Goldsrc port of the original [blender_io_mesh_bsp](https://github.com/andyp123/blender_io_mesh_bsp/) released by andyp123.
+This fork has a few changes to make importing automatically do more things right when targeting Cycles, like:
+
+- fixing light color and intensity parsing,
+- hiding sky brushes (they obstruct environment lighting),
+- making materials have 0 specularity by default,
+- fixing importing textures with blue channel transparency for newer Blender versions,
+- making textures with blue channel transparency pass all light through by default,
+- and some other changes in the same spirit.
+
+---
 
 An add-on for [Blender](https://www.blender.org/) that makes it possible to import
 Goldsrc BSP files, including textures (which are stored in the BSP) as materials. It
-works with Blender 2.80
+works with Blender 3.5.0.
 
-![Imported level (c0a0)](https://raw.githubusercontent.com/stalker2106x/blender_io_mesh_bsp/master/README_img/c0a0.png)
+Here's an example Cycles render of a map imported as-is, with no manual changes:
+
+![Imported level](https://github.com/YaLTeR/blender_io_mesh_bsp/assets/1794388/baddbccf-6dc6-4231-b113-279c64b0827c)
 
 ## Installation
-1. Download the latest release from GitHub by clicking [here](https://github.com/stalker2106x/blender_io_mesh_bsp/releases/).
+1. Make a zip archive containing the io_mesh_bsp folder.
 2. In Blender, open Preferences (Edit > Preferences) and switch to the Add-ons section.
-3. Select 'Install Add-on from file...' and select the file that you downloaded.
+3. Select 'Install Add-on from file...' and select the zip archive.
 4. Search for the add-on in the list (enter 'bsp' to quickly find it) and enable it.
 5. Save the preferences if you would like the script to always be enabled.
 
