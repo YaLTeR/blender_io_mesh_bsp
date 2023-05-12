@@ -26,7 +26,7 @@ import os
 from collections import namedtuple
 from math import radians
 from random import uniform # used for setting material color
-
+from mathutils import Color
 
 # type definitions
 BSPHeader = namedtuple('BSPHeader', 
@@ -154,6 +154,19 @@ def parse_vec3_safe(obj, key, scale=1, default=[0,0,0]):
     if key in obj:
         val = obj[key].split(' ')
         if len(val) is 3:
+            try:
+                vec = [float(i) * scale for i in val]
+                return vec
+            except ValueError:
+                pass
+
+    return default
+
+
+def parse_vec4_safe(obj, key, scale=1, default=[0,0,0,0]):
+    if key in obj:
+        val = obj[key].split(' ')
+        if len(val) is 4:
             try:
                 vec = [float(i) * scale for i in val]
                 return vec
@@ -364,16 +377,18 @@ def light_add(entity, scale):
     origin = parse_vec3_safe(entity, 'origin', scale)
     angle = [0, 0, 0]
     angle[2] = parse_float_safe(entity, 'angle', 0)
-    light = parse_float_safe(entity, 'light', 200)
-    color = parse_vec3_safe(entity, '_color', 1, [255, 255, 255])
+    light = parse_vec4_safe(entity, '_light', 1, [255, 255, 255, 200])
+
+    color, energy = light[:3], light[3]
+    scale = max(color) / 255
 
     # Create a light (not yet linked to the scene)
     classname = entity['classname']
     light_data = bpy.data.lights.new(classname, 'POINT')
     #light_data.use_nodes = True
     #light_data.node_tree.nodes['Emission'].inputs['Strength'].default_value = light
-    light_data.energy = light
-    light_data.color = [c * 1.0/255.0 for c in color]
+    light_data.energy = energy * 5 * scale
+    light_data.color = Color([c / 255 / scale for c in color])
 
     obj = bpy.data.objects.new(classname, light_data)
     obj.location = origin
