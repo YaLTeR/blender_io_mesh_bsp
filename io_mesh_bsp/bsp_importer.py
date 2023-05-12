@@ -482,6 +482,7 @@ def create_materials(texture_data, options):
             compare_node = node_tree.nodes.new('ShaderNodeMath')
             compare_node.operation = 'COMPARE'
             compare_node.inputs[1].default_value = 0.0
+            compare_node.inputs[2].default_value = 0.0
             node_tree.links.new(subtract_node.outputs[0], compare_node.inputs[0])
 
             invert_node = node_tree.nodes.new('ShaderNodeInvert')
