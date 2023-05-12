@@ -767,6 +767,10 @@ def import_bsp(context, filepath, options):
             obj = None
             # this stops lights being imported as empties, even with import_all enabled
             if classname.startswith('light'):
+                # Environment lights aren't normal light sources.
+                if classname == 'light_environment':
+                    continue
+
                 if create_lights:
                     obj = light_add(entity, scale)
                     added_lights.append(obj)
