@@ -18,7 +18,7 @@
 # addon information
 bl_info = {
     "name": "Import GoldSrc BSP format",
-    "author": "Maxime Martens (forked from Andrew Palmer work with contributions from Ian Cunningham)",
+    "author": "Maxime Martens (forked from Andrew Palmer work with contributions from Ian Cunningham), contributions by Ivan Molodetskikh",
     "version": (1, 2, 1),
     "blender": (3, 5, 0),
     "location": "File > Import > GoldSrc (.bsp)",
