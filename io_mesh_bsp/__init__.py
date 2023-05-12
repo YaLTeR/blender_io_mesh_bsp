@@ -19,7 +19,7 @@
 bl_info = {
     "name": "Import GoldSrc BSP format",
     "author": "Maxime Martens (forked from Andrew Palmer work with contributions from Ian Cunningham)",
-    "version": (1, 2),
+    "version": (1, 2, 1),
     "blender": (2, 80, 0),
     "location": "File > Import > GoldSrc (.bsp)",
     "description": "Import geometry and materials from a GoldSrc BSP file.",
