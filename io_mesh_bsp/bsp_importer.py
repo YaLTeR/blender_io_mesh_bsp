@@ -463,6 +463,8 @@ def create_materials(texture_data, options):
         image_node.location = [-256.0, 300.0]
         node_tree.links.new(image_node.outputs['Color'], main_shader.inputs[0])
 
+        main_shader.inputs['Specular'].default_value = 0
+
         # Handle magenta transparency
         if name[0] == '{':
             mat.blend_method = 'BLEND'
