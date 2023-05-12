@@ -384,9 +384,14 @@ def light_add(entity, scale):
 
     # Create a light (not yet linked to the scene)
     classname = entity['classname']
-    light_data = bpy.data.lights.new(classname, 'POINT')
-    #light_data.use_nodes = True
-    #light_data.node_tree.nodes['Emission'].inputs['Strength'].default_value = light
+
+    if classname == 'light_spot':
+        light_data = bpy.data.lights.new(classname, 'SPOT')
+        light_data.spot_size = radians(parse_float_safe(entity, '_cone', 10) * 2)
+        light_data.spot_blend = 1
+        angle[1] = radians(-90 - parse_float_safe(entity, 'pitch', 0))
+    else:
+        light_data = bpy.data.lights.new(classname, 'POINT')
     light_data.energy = energy * 5 * scale
     light_data.color = Color([c / 255 / scale for c in color])
     light_data.shadow_soft_size = 0.25
