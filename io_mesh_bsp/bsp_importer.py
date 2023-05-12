@@ -389,6 +389,7 @@ def light_add(entity, scale):
     #light_data.node_tree.nodes['Emission'].inputs['Strength'].default_value = light
     light_data.energy = energy * 5 * scale
     light_data.color = Color([c / 255 / scale for c in color])
+    light_data.shadow_soft_size = 0.25
 
     obj = bpy.data.objects.new(classname, light_data)
     obj.location = origin
