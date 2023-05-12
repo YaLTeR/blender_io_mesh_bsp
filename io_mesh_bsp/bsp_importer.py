@@ -505,7 +505,22 @@ def create_materials(texture_data, options):
             node_tree.links.new(mask_emission_shader.outputs[0], mask_mix_shader.inputs[2])
             main_shader = mask_mix_shader
 
-        node_tree.links.new(main_shader.outputs[0], output_node.inputs['Surface'])
+        # Make light pass through blue-transparency surfaces entirely
+        if name[0] == '{':
+            light_path_node = node_tree.nodes.new('ShaderNodeLightPath')
+            add_node = node_tree.nodes.new('ShaderNodeMath')
+            add_node.use_clamp = True
+            transparent_bsdf = node_tree.nodes.new('ShaderNodeBsdfTransparent')
+            mix_shader = node_tree.nodes.new('ShaderNodeMixShader')
+
+            node_tree.links.new(light_path_node.outputs['Is Camera Ray'], add_node.inputs[0])
+            node_tree.links.new(light_path_node.outputs['Is Singular Ray'], add_node.inputs[1])
+            node_tree.links.new(add_node.outputs[0], mix_shader.inputs[0])
+            node_tree.links.new(transparent_bsdf.outputs[0], mix_shader.inputs[1])
+            node_tree.links.new(main_shader.outputs[0], mix_shader.inputs[2])
+            node_tree.links.new(mix_shader.outputs[0], output_node.inputs['Surface'])
+        else:
+            node_tree.links.new(main_shader.outputs[0], output_node.inputs['Surface'])
 
         # set up transparent textures
         if texture_entry['use_alpha']:
